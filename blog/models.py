@@ -1,8 +1,12 @@
 from django.db import models
+from django import forms
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.search import index
+from wagtail.snippets.models import register_snippet
+from wagtail.images.edit_handlers import ImageChooserPanel
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 class BlogIndexPage(Page):
     intro = RichTextField(blank=True)
@@ -18,6 +22,7 @@ class BlogPage(Page):
     date = models.DateField("Post date")
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
+    categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
 
     search_fields = Page.search_fields + [
         index.SearchField('intro'),
@@ -25,7 +30,29 @@ class BlogPage(Page):
     ]
 
     content_panels = Page.content_panels + [
-        FieldPanel('date'),
+        MultiFieldPanel([
+            FieldPanel('date'),
+            FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
+        ], heading="Blog information"),
         FieldPanel('intro'),
-        FieldPanel('body', classname="full"),
+        FieldPanel('body'),
     ]
+
+@register_snippet
+class BlogCategory(models.Model):
+    name = models.CharField(max_length=255)
+    icon = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='+'
+    )
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('icon'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'blog categories'
