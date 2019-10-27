@@ -12,7 +12,7 @@
     {% for post in blogpages %}
         <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
         {{ post.specific.intro }}
-        {{ post.specific.body|richtext }}
+        <!-- {{ post.specific.body|richtext }} -->
     {% endfor %}
 
 {% endblock %}
