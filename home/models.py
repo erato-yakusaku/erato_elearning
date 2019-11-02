@@ -15,7 +15,6 @@ class HomePage(Page):
         context = super().get_context(request)
         blogindexpages = BlogIndexPage.objects.live()
         context['blogindexpages'] = blogindexpages
-        print(blogindexpages)
         return context
 
     content_panels = Page.content_panels + [
