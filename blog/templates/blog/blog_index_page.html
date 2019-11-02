@@ -29,6 +29,11 @@
                 <!-- {{ post.specific.body|richtext }} -->
             </div>
         {% endfor %}
+        <div class="row">
+            <div class="col-sm-12">
+                <p><a href="{{ page.get_parent.url }}">Return to Root</a></p>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
