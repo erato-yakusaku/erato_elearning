@@ -13,7 +13,7 @@ class HomePage(Page):
     def get_context(self, request):
         # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
-        blogindexpages = BlogIndexPage.objects.live()
+        blogindexpages = self.get_children().live()
         context['blogindexpages'] = blogindexpages
         return context
 
