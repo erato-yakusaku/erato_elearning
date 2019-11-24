@@ -7,6 +7,7 @@ from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 from wagtail.images.edit_handlers import ImageChooserPanel
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from wagtail.contrib.table_block.blocks import TableBlock
 
 class BlogIndexPage(Page):
     intro = RichTextField(blank=True)
@@ -21,7 +22,8 @@ class BlogIndexPage(Page):
 class BlogPage(Page):
     date = models.DateField("Post date")
     intro = models.CharField(max_length=250)
-    body = RichTextField(blank=True)
+    body = RichTextField(blank=True,
+    features=['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'ul', 'document-link', 'image', 'embed', 'code', 'superscript', 'subscript', 'strikethrough', 'blockquote', 'bold', 'italic', 'link'])
     categories = ParentalManyToManyField('blog.BlogCategory', blank=True)
 
     search_fields = Page.search_fields + [
